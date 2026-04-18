@@ -1,60 +1,115 @@
-# SmartSeason Field Monitoring System
+# 🌱 SmartSeason: Field Monitoring System
 
-## Overview
-SmartSeason is a clean, minimal, and fully functional web application designed for tracking crop progress across multiple fields during a growing season. The system operates with dual-role authentication (Admin and Field Agent) and implements computed logic to evaluate field risks effectively.
+SmartSeason is a premium full-stack agricultural monitoring platform designed for commercial farms to track crop progress, manage field agents, and optimize seasonal yields through real-time data intelligence.
 
-## Features
-- **Admin Dashboard**: View all monitored fields globally. Assign fields to available agents. Visualize real-time calculated system metrics.
-- **Field Agent Dashboard**: Manage exclusively assigned fields. Add sequential status checkpoints, stage tracking, and notes.
-- **Field Management**: Fields have logical statuses (`Active`, `At Risk`, `Completed`) dynamically computed based on harvest stages and inactivity periods (> 7 days).
+## 🚀 Quick Start (Setup Instructions)
 
-## Tech Stack
-- Frontend: React + Vite + TypeScript (Migrated functionality to `.tsx` following best practices)
-- Backend: Node.js + Express
-- Database: PostgreSQL (Raw PL/pgSQL statements to ensure simplicity and bypass heavy ORMs)
-- Auth: JWT (JSON Web Tokens)
+### Prerequisites
+- **Node.js**: v16+ recommended
+- **PostgreSQL**: Running locally or on a server
 
-## Setup Instructions
-
-### Pre-requisites
-1. Node.js installed (> v16+ recommended).
-2. PostgreSQL installed and running locally on port `5432` with a database credential that matches `postgres:1234`.
-
-### Installation
-1. Install dependencies for the root, frontend, and backend environments:
+### 1. Backend Setup (`/server`)
+1. Open a terminal in the `server` directory.
+2. Install dependencies:
    ```bash
    npm install
-   cd client && npm install
-   cd ../server && npm install
-   cd ..
    ```
-2. Initialize Database Models & Seed Data:
+3. Create a `.env` file in the `server` folder:
+   ```env
+   PORT=3000
+   DATABASE_URL=postgres://your_user:your_password@localhost:5432/smartseason
+   JWT_SECRET=your_super_secret_key
+   ```
+4. Initialize the database and seed demo data:
    ```bash
-   cd server
    node db/createDb.js
    node db/init.js
    node db/seed.js
    ```
-
-3. Launch Server and Client Concurrently from the root directory:
+5. Start the server:
    ```bash
-   npm start
+   npm run dev
    ```
 
-*The Express backend runs on `http://localhost:3000` and the React frontend on Vite's default dev port.*
+### 2. Frontend Setup (`/client`)
+1. Open a terminal in the `client` directory.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the `client` folder:
+   ```env
+   VITE_API_URL=http://localhost:3000/api
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Design Decisions
-- **Monorepo Structure**: Kept frontend and backend isolated cleanly under a single repository roof, leveraging NPM workspaces or `concurrently` for rapid development initialization.
-- **Vanilla Data Access**: Decided against heavy ORMs to keep database setup "simple and practical" while utilizing PL/PgSQL migrations manually.
-- **Inline Minimalist UI**: Eliminated dependency bloat. The user interface leverages lean structural styling, implementing simple unified color codes indicating severity (Active = Green, At Risk = Orange, Completed = Gray).
-- **TypeScript Conversion**: Components were restructured safely to TypeScript (`.tsx`) enforcing stronger typing for React Components without aggressively limiting Vanilla JS paradigms on the backend models.
+### 3. Unified Startup (Root)
+From the root directory, you can run both simultaneously:
+```bash
+npm install
+npm start
+```
 
-## Assumptions
-- Agents can only insert updates indicating advancing stages, restricting backwards regression for ease of auditing.
-- Computing status based on simple metrics guarantees scalability. (Field updates not created within rolling 7 days throw flags).
+---
 
-## Demo Credentials
-| Role | Email | Password |
-|---|---|---|
-| Admin | admin@smartseason.app | 1234 |
-| Field Agent | agent@smartseason.app | 1234 |
+## 🎨 Design Decisions
+
+### Technology Stack
+- **Frontend**: React (Vite) + TypeScript for type safety and performance.
+- **Styling**: Vanilla CSS for maximum flexibility and performance. I implemented a custom **Design System** in `index.css` using CSS Variables for consistent tokens (colors, shadows, spacing).
+- **Backend**: Node.js + Express for a lightweight, scalable REST API.
+- **Database**: PostgreSQL for robust relational data management, essential for tracking fields and their activity history.
+
+### Application Architecture
+- **Component-Based UI**: Reusable components like `Navbar` and `BackButton` ensure a consistent user experience.
+- **Route Protection**: Implemented a custom `ProtectedRoute` component on the frontend and JWT middleware on the backend to enforce role-based access control (RBAC).
+- **Service Layer**: Centralized API calls in `client/services/api.ts` to attach authentication headers automatically to all protected requests.
+
+### Aesthetics
+I prioritized a **Premium Glassmorphism** design:
+- **Landing Page**: High-definition agricultural background with glassy floating elements.
+- **Interactivity**: Smooth CSS transitions on hover and entry animations for all pages using an `animate-in` utility.
+- **Clarity**: High contrast typography and color-coded status badges (Active, At Risk, Completed) for rapid data interpretation.
+
+---
+
+## 💡 Assumptions Made
+
+### 1. Authentication Logic
+- **Email Validation**: All user logins and registrations must end with `@gmail.com`. This was an explicit requirement for this environment.
+- **Single Admin Rule**: The system only allows **one Admin account** to be registered. Once an Admin is registered, any further attempts to register with the "Admin" role will be blocked by the backend to prevent unauthorized access.
+
+### 2. Field Health (Status Logic)
+The system calculates the status of a field dynamically based on activity:
+- **Completed**: If the current stage is set to "Harvested".
+- **At Risk**: If the field has not received a site update (from either registration or a note) in the last **7 days**.
+- **Active**: All other fields that are being updated regularly.
+
+### 3. Role Permissions
+- **Admin**: Can create, edit, delete, and list all fields. Can assign agents and view the entire system summary.
+- **Field Agent**: Can only see fields assigned to them. They can view the history and submit new stage/note updates.
+
+---
+
+## 📂 Project Structure
+
+```text
+SmartSeason/
+├── client/
+│   ├── public/              # Static assets (Hero backgrounds)
+│   ├── src/
+│   │   ├── components/      # Reusable UI (Navbar, BackButton, ProtectedRoute)
+│   │   ├── context/         # AuthContext for session management
+│   │   ├── pages/           # Modular views (Admin, Agent, Fields, etc.)
+│   │   ├── services/        # API communication layer
+│   │   └── routes/          # AppRoutes configuration
+└── server/
+    ├── controllers/         # Request handling logic
+    ├── db/                  # SQL schema and initialization scripts
+    ├── middlewares/         # Auth and Error handlers
+    ├── routes/              # Express endpoint definitions
+    └── services/            # Core business logic (Status calculation, DB queries)
+```
