@@ -41,7 +41,7 @@ async function getAllAgents() {
 
 async function updateUserProfile(userId, name, password) {
     if (password) {
-        const salt = await bcrypt.getSalt(10);
+        const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const { rows } = await pool.query(
             'UPDATE users SET name = $1, password_hash = $2 WHERE id = $3 RETURNING id, name, email, role',

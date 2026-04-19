@@ -55,6 +55,18 @@ npm start
 
 ---
 
+## 🔐 Sample Logins
+
+You can use the following credentials to explore the system features after seeding the database:
+
+| User Role | Email Address | Password |
+| :--- | :--- | :--- |
+| **System Admin** | `jonnymaina3937@gmail.com` | `1234` |
+| **Field Agent** | `maina@gmail.com` | `1234` |
+| **Demo Agent** | `agent@smartseason.app` | `1234` |
+
+---
+
 ## 🎨 Design Decisions
 
 ### Technology Stack

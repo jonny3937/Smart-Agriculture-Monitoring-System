@@ -13,11 +13,24 @@ async function register(req, res) {
 async function login(req, res) {
     try {
         const { email, password } = req.body;
-        const data = await userService.loginUser(email, password);
-        res.json(data);
+        const { token, user } = await userService.loginUser(email, password);
+        
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+
+        res.json({ user });
     } catch (error) {
         res.status(401).json({ message: error.message });
     }
+}
+
+async function logout(req, res) {
+    res.clearCookie('token');
+    res.json({ message: 'Logged out successfully' });
 }
 
 async function getAgents(req, res) {
@@ -40,4 +53,4 @@ async function updateProfile(req, res) {
     }
 }
 
-module.exports = { register, login, getAgents, updateProfile };
+module.exports = { register, login, logout, getAgents, updateProfile };

@@ -28,7 +28,7 @@ async function updateStage(req, res) {
     try {
         const { id } = req.params;
         const { stage, notes } = req.body;
-        const update = await fieldService.updateFieldStage(id, stage, notes, req.user.id);
+        const update = await fieldService.updateFieldStage(id, stage, notes, req.user.id, req.user.role);
         res.status(201).json(update);
     } catch (err) { res.status(400).json({ message: err.message }); }
 }
@@ -36,7 +36,7 @@ async function updateStage(req, res) {
 async function listUpdates(req, res) {
     try {
         const { id } = req.params;
-        const updates = await fieldService.getFieldUpdates(id);
+        const updates = await fieldService.getFieldUpdates(id, req.user.id, req.user.role);
         res.json(updates);
     } catch (err) { res.status(500).json({ message: err.message }); }
 }

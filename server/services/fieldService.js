@@ -43,7 +43,14 @@ async function assignField(fieldId, agentId) {
     return rows[0];
 }
 
-async function updateFieldStage(fieldId, stage, notes, updaterId) {
+async function updateFieldStage(fieldId, stage, notes, updaterId, role) {
+    if (role === 'Field Agent') {
+        const { rows: fieldRows } = await pool.query('SELECT assigned_agent_id FROM fields WHERE id = $1', [fieldId]);
+        if (fieldRows.length === 0 || fieldRows[0].assigned_agent_id !== updaterId) {
+            throw new Error('Unauthorized: You are not assigned to this field');
+        }
+    }
+
     await pool.query('BEGIN');
     try {
         await pool.query(
@@ -62,7 +69,14 @@ async function updateFieldStage(fieldId, stage, notes, updaterId) {
     }
 }
 
-async function getFieldUpdates(fieldId) {
+async function getFieldUpdates(fieldId, userId, role) {
+    if (role === 'Field Agent') {
+        const { rows: fieldRows } = await pool.query('SELECT assigned_agent_id FROM fields WHERE id = $1', [fieldId]);
+        if (fieldRows.length === 0 || fieldRows[0].assigned_agent_id !== userId) {
+            throw new Error('Unauthorized: You are not assigned to this field');
+        }
+    }
+
     const { rows } = await pool.query(
         `SELECT u.*, us.name, us.role 
          FROM field_updates u 

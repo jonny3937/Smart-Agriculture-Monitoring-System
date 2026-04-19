@@ -15,25 +15,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-        setLoading(false);
+        const verifyUser = async () => {
+            try {
+                const { data } = await api.get('/users/me');
+                setUser(data);
+            } catch (err) {
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+        verifyUser();
     }, []);
 
     const login = async (email: any, password: any) => {
         const { data } = await api.post('/users/login', { email, password });
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
         setUser(data.user);
         return data.user;
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
+    const logout = async () => {
+        try {
+            await api.post('/users/logout');
+        } catch (err) {
+            console.error('Logout failed', err);
+        } finally {
+            setUser(null);
+            // Optional: Redirect to login or clear other states
+        }
     };
 
     return (
