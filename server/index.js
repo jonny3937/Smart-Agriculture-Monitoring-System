@@ -11,7 +11,7 @@ const apiRoutes = require('./routes');
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:3000',
-    'https://your-app.netlify.app',
+    'https://smart-agriculture-monitoring-system.netlify.app',
 ];
 
 app.use(cors({
