@@ -51,6 +51,26 @@ export default function Login() {
                         <span style={{ color: 'var(--text-muted)' }}>Don't have an account? </span>
                         <Link to="/register" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '600' }}>Register here</Link>
                     </div>
+
+                    <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border)' }}>
+                        <h3 style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)', marginBottom: '1rem', textAlign: 'center', letterSpacing: '0.05em' }}>DEMO CREDENTIALS</h3>
+                        <div style={{ display: 'grid', gap: '0.75rem' }}>
+                            <div style={{ background: 'var(--background)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.8125rem' }}>
+                                <div style={{ fontWeight: '600', color: 'var(--primary)', marginBottom: '0.25rem' }}>Admin Access</div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-main)' }}>mainamwangi@gmail.com</span>
+                                    <code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: '4px', fontStyle: 'normal', color: 'var(--text-main)' }}>maina</code>
+                                </div>
+                            </div>
+                            <div style={{ background: 'var(--background)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.8125rem' }}>
+                                <div style={{ fontWeight: '600', color: 'var(--secondary)', marginBottom: '0.25rem' }}>Agent Access</div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-main)' }}>maina@gmail.com</span>
+                                    <code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: '4px', fontStyle: 'normal', color: 'var(--text-main)' }}>maina_me</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
