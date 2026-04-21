@@ -3,12 +3,16 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 async function registerUser(name, email, password, role) {
+    // Removed restriction for single admin to allow demo/testing accounts
+    /*
     if (role === 'Admin') {
         const { rows: adminRows } = await pool.query("SELECT id FROM users WHERE role = 'Admin'");
         if (adminRows.length > 0) {
             throw new Error('An Admin is already registered. Only one admin is allowed.');
         }
     }
+    */
+
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -35,9 +39,11 @@ async function loginUser(email, password) {
 }
 
 async function getAllAgents() {
-     const { rows } = await pool.query('SELECT id, name, email, role FROM users WHERE role = $1', ['Field Agent']);
+     // Fetch all users for admin management, ordered by role then name
+     const { rows } = await pool.query('SELECT id, name, email, role FROM users ORDER BY role DESC, name ASC');
      return rows;
 }
+
 
 async function updateUserProfile(userId, name, password) {
     if (password) {

@@ -53,8 +53,8 @@ export default function Users() {
                                     <td style={{ padding: '1.25rem', color: 'var(--text-muted)' }}>{agent.email}</td>
                                     <td style={{ padding: '1.25rem' }}>
                                         <span style={{ 
-                                            background: '#ebf8ff', 
-                                            color: '#2b6cb0', 
+                                            background: agent.role === 'Admin' ? '#fef3c7' : '#ebf8ff', 
+                                            color: agent.role === 'Admin' ? '#92400e' : '#2b6cb0', 
                                             padding: '0.25rem 0.5rem', 
                                             borderRadius: '6px', 
                                             fontSize: '0.75rem',
