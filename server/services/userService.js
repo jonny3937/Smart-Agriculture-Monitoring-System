@@ -3,15 +3,15 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 async function registerUser(name, email, password, role) {
-    // Removed restriction for single admin to allow demo/testing accounts
-    /*
     if (role === 'Admin') {
+        if (email !== 'mainamwangi@gmail.com') {
+            throw new Error('Only mainamwangi@gmail.com is allowed to register as an Admin.');
+        }
         const { rows: adminRows } = await pool.query("SELECT id FROM users WHERE role = 'Admin'");
         if (adminRows.length > 0) {
             throw new Error('An Admin is already registered. Only one admin is allowed.');
         }
     }
-    */
 
 
     const salt = await bcrypt.genSalt(10);

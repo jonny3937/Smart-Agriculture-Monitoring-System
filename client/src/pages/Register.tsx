@@ -20,6 +20,11 @@ export default function Register() {
             return;
         }
 
+        if (role === 'Admin' && email !== 'mainamwangi@gmail.com') {
+            setError('Only mainamwangi@gmail.com is allowed to register as an Admin.');
+            return;
+        }
+
         try {
             await api.post('/users/register', { name, email, password, role });
             navigate('/login');
